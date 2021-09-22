@@ -14,10 +14,16 @@ nlp = spacy.load("es_core_news_sm")
 
 def normalize(text):
     doc = nlp(text)
-    words = [t.orth_ for t in doc if not t.is_punct | t.is_stop]
-    lexical_tokens = [t.lower() for t in words if len(t) > 3 and
-                      t.isalpha()]
-    return lexical_tokens
+    # sacamos stopwords y signos de puntuación
+    words = [t for t in doc if not t.is_punct | t.is_stop]
+    # nos quedamos con tokens alfabéticos y con largo considerable
+    lexical_tokens = [t for t in words if len(t.orth_) > 3 and
+                      t.orth_.isalpha()]
+
+    # removemos lemmas repetidos y pronombres
+    cleaned_lemmas = list(set([tok.lemma_.lower()
+                          for tok in lexical_tokens if tok.pos_ != 'PRON']))
+    return cleaned_lemmas
 
 
 tokens = normalize(raw_text)
