@@ -1,20 +1,25 @@
-#import spacy
-
-# probando nlp con es_core_nwews_sm
-#nlp = spacy.load("es_core_news_sm")
-
 import spacy
-from spacy.lang.es.examples import sentences
 
-with open("spanish_billion_words/spanish_billion_words_00") as f:
+
+# corpus de texto
+with open("lavoz.txt") as f:
     raw_text = f.read()
+raw_text = raw_text[:len(raw_text) // 65]
 
-
+# spacy nlp
 nlp = spacy.load("es_core_news_sm")
 
+# funcion para normalizar el texto
 
-doc = nlp(raw_text)
-print(doc.text)
-for token in doc:
-    print(token.text, token.pos_, token.dep_)
 
+def normalize(text):
+    doc = nlp(text)
+    words = [t.orth_ for t in doc if not t.is_punct | t.is_stop]
+    lexical_tokens = [t.lower() for t in words if len(t) > 3 and
+                      t.isalpha()]
+    return lexical_tokens
+
+
+tokens = normalize(raw_text)
+
+print(tokens)
