@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans
 from collections import Counter
 
 
-NUM_CLUSTERS = 10
+NUM_CLUSTERS = 25
 
 # funcion para normalizar el oraciones
 
